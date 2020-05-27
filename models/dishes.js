@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
+require('mongoose-currency').loadType(mongoose);
+const currency = mongoose.Types.currency;
 const commentSchema = new Schema({
   rating:{
       type:Number,
