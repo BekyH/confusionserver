@@ -12,7 +12,7 @@ const mongoose = require('mongoose');
 var session = require('express-session');
 var FileStore = require('session-file-store')(session);
 
-
+const userRouter = require('./routes/userRouter');
 const dishRouter = require('./routes/dishRouter');
 const promoRouter = require('./routes/promoRouter');
 const leaderRouter = require('./routes/leaderRouter');
@@ -40,34 +40,18 @@ app.use(session({
     store:new FileStore()
 
 }));
+app.use('/users',userRouter);
 function auth(req,res,next){
     console.log(req.session);
     if(!req.session.user){
-        var authHeader = req.headers.authorization;
-    if(!authHeader){
+        
+        
         res.statusCode = 401;
         res.setHeader('WWW-authenticate','Basic');
         res.end("you are not authenticated");
-
-    }
-
-    var auth = new Buffer.from(authHeader.split(' ')[1],'base64').toString().split(':');
-    var username = auth[0];
-    var password = auth[1];
-    if(username=='admin' && password=='password'){
-        req.session.user = 'admin';
-         next();
-
-    }
+}
     else{
-        res.statusCode = 401;
-        res.setHeader('WWW-authenticate','Basic');
-        res.end("you are not authenticated");
-    }
-
-    }
-    else{
-        if(req.session.user=='admin'){
+        if(req.session.user==='authenticated'){
             next();
 
         }
