@@ -11,7 +11,8 @@ const mongoose = require('mongoose');
 
 var session = require('express-session');
 var FileStore = require('session-file-store')(session);
-
+var passport = require('passport');
+var authenticate = require('./authenticate');
 const userRouter = require('./routes/userRouter');
 const dishRouter = require('./routes/dishRouter');
 const promoRouter = require('./routes/promoRouter');
@@ -40,33 +41,31 @@ app.use(session({
     store:new FileStore()
 
 }));
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.use('/users',userRouter);
 function auth(req,res,next){
-    console.log(req.session);
-    if(!req.session.user){
+
+    if(!req.user){
         
         
-        res.statusCode = 401;
+        res.statusCode = 403;
         res.setHeader('WWW-authenticate','Basic');
         res.end("you are not authenticated");
 }
     else{
-        if(req.session.user==='authenticated'){
+        
             next();
 
         }
-        else{
-            res.statusCode = 401;
-            res.setHeader('WWW-authenticate','Basic');
-            res.end("you are not authenticated");
-             
-        }
+         
     }
 
     
 
 
-}
+
 app.use(auth);
 
 app.use('/dishes',dishRouter);
