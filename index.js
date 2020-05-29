@@ -1,12 +1,18 @@
 const express = require('express');
 const createError = require('http-errors');
 const path = require('path');
+
+
 const http = require('http');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
-const Dishes = require('./models/dishes');
+
+var session = require('express-session');
+var FileStore = require('session-file-store')(session);
+
+
 const dishRouter = require('./routes/dishRouter');
 const promoRouter = require('./routes/promoRouter');
 const leaderRouter = require('./routes/leaderRouter');
@@ -25,11 +31,18 @@ const app = express();
 
 app.use(morgan('dev'));
 app.use(bodyParser.json());
-app.use(cookieParser('12345-67890-09876-54321'));
+//app.use(cookieParser('12345-67890-09876-54321'));
+app.use(session({
+    name:'session-id',
+    secret:'12345-67890-09876-54321',
+    saveUninitialized:false,
+    resave:false,
+    store:new FileStore()
 
+}));
 function auth(req,res,next){
-    console.log(req.signedCookies);
-    if(!req.signedCookies.user){
+    console.log(req.session);
+    if(!req.session.user){
         var authHeader = req.headers.authorization;
     if(!authHeader){
         res.statusCode = 401;
@@ -42,7 +55,7 @@ function auth(req,res,next){
     var username = auth[0];
     var password = auth[1];
     if(username=='admin' && password=='password'){
-        res.cookie('user','admin',{signed:true});
+        req.session.user = 'admin';
          next();
 
     }
@@ -54,7 +67,7 @@ function auth(req,res,next){
 
     }
     else{
-        if(req.signedCookies.user=='admin'){
+        if(req.session.user=='admin'){
             next();
 
         }
