@@ -22,8 +22,36 @@ connect.then((db)=>{
     console.log(err);
 });
 const app = express();
+
 app.use(morgan('dev'));
 app.use(bodyParser.json());
+function auth(req,res,next){
+    console.log(req.headers);
+
+    var authHeader = req.headers.authorization;
+    if(!authHeader){
+        res.statusCode = 401;
+        res.setHeader('WWW-authenticate','Basic');
+        res.end("you are not authenticated");
+
+    }
+
+    var auth = new Buffer(authHeader.split(' ')[1],'base64').toString().split(':');
+    var username = auth[0];
+    var password = auth[1];
+    if(username=='admin' && password=='password'){
+         next();
+
+    }
+    else{
+        res.statusCode = 401;
+        res.setHeader('WWW-authenticate','Basic');
+        res.end("you are not authenticated");
+    }
+
+
+}
+app.use(auth);
 app.use('/dishes',dishRouter);
 app.use('/promotions',promoRouter);
 app.use('/leaders',leaderRouter);
