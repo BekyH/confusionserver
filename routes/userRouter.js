@@ -78,11 +78,12 @@ userRouter.get('/logout',(req,res)=>{
     if(req.session){
         req.session.destroy();
         res.clearCookie('session-id');
-        res.redirect('/'); 
+        res.end('you are logout'); 
     }
     else{
         res.statusCode = 403;
         res.setHeader("Content-Type","text/plain");
         res.end("You are not logged in");
     }
-})
+});
+module.exports = userRouter;
