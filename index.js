@@ -43,7 +43,12 @@ app.use(session({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
-
+app.use((req,res,next)=>{
+    console.log(req.headers);
+    res.statusCode = 200;
+    res.setHeader('Content-Type','text/html');
+     res.end('<html><body><h1>This is an express server</h1></body></html>');
+});
 app.use('/users',userRouter);
 function auth(req,res,next){
 
@@ -71,12 +76,7 @@ app.use(auth);
 app.use('/dishes',dishRouter);
 app.use('/promotions',promoRouter);
 app.use('/leaders',leaderRouter);
-app.use((req,res,next)=>{
-    console.log(req.headers);
-    res.statusCode = 200;
-    res.setHeader('Content-Type','text/html');
-     res.end('<html><body><h1>This is an express server</h1></body></html>');
-});
+
 
 
 

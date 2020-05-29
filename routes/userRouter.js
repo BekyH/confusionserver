@@ -34,7 +34,7 @@ userRouter.post('/signup',(req,res,next)=>{
 userRouter.post('/login', passport.authenticate('local'),(req,res)=>{
     res.statusCode = 200;
     res.setHeader("Content-Type","application/json");
-    res.json({success:true,status:'Login Successful',user:user});
+    res.json({success:true,status:'Login Successful'});
 });
 
 userRouter.get('/logout',(req,res)=>{
