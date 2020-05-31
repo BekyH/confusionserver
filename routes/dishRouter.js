@@ -20,7 +20,7 @@ dishRouter.route('/')
     })
 
 })
-.post(authenticate.verifyUser,(req,res,next)=>{
+.post((req,res,next)=>{
     Dishes.create(req.body)
     .then((dish)=>{
         console.log("Dish created ",dish);

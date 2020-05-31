@@ -3,8 +3,10 @@ var LocalStrategy = require('passport-local').Strategy;
 var user = require('./models/users');
 var JwtStrategy = require('passport-jwt').Strategy;
 var ExtractJwt = require('passport-jwt').ExtractJwt;
-var jwt = require('jsonwebtoken');
-var config = require('./config');
+var jwt = require('jsonwebtoken'); // used to create, sign, and verify tokens
+
+
+var config = require('./config.js');
 exports.local = passport.use(new LocalStrategy(user.authenticate()));
 passport.serializeUser(user.serializeUser()); // determines which data of the user object should be stored in the session
 passport.deserializeUser(user.deserializeUser());
@@ -13,7 +15,6 @@ exports.getToken = function(user) {
     return jwt.sign(user, config.secretKey,
         {expiresIn: 3600});
 };
-
 var opts = {};
 opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
 opts.secretOrKey = config.secretKey;
