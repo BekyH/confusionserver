@@ -7,10 +7,10 @@ const cors = require('./cors');
 var userRouter = express.Router();
 userRouter.use(bodyParser.json());
 
-userRouter.get('/',(req,res,next)=>{
+userRouter.get('/',cors.corsWithOptions,(req,res,next)=>{
     res.send('respond with a resource');
 });
-userRouter.post('/signup',(req,res,next)=>{
+userRouter.post('/signup',cors.corsWithOptions,(req,res,next)=>{
     User.register(new User({username:req.body.username}),req.body.password,(err,user)=>{
 
     
@@ -50,7 +50,7 @@ userRouter.post('/signup',(req,res,next)=>{
   
 });
 
-userRouter.post('/login', passport.authenticate('local'),(req,res)=>{
+userRouter.post('/login', cors.corsWithOptions, passport.authenticate('local'),(req,res)=>{
     var token = authenticate.getToken({_id: req.user._id});
   res.statusCode = 200;
   res.setHeader('Content-Type', 'application/json');
