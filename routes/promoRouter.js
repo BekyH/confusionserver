@@ -6,7 +6,10 @@ const cors = require('./cors');
 const promoRouter = express.Router();
 promoRouter.use(bodyParser.json());
 promoRouter.route('/')
+.options(cors.corsWithOptions,(req,res)=>{
+    res.sendStatus(200);
 
+})
 .get(cors.cors,(req,res,next)=>{
     promotions.find({})
     .then((promotions)=>{
@@ -39,6 +42,10 @@ promoRouter.route('/')
     .catch((err)=>next(err));
 });
 promoRouter.route('/:promoId')
+.options(cors.corsWithOptions,(req,res)=>{
+    res.sendStatus(200);
+
+})
 .get(cors.cors,(req,res,next)=>{
     promotions.findById(req.params.promoId)
     .then((promotion)=>{
