@@ -42,7 +42,7 @@ dishRouter.route('/')
     res.statusCode = 403;
     res.end('Put operation not supported');
 })
-.delete(cors.corsWithOptions,authenticate.verifyUser,(req,res,next)=>{
+.delete(cors.corsWithOptions,(req,res,next)=>{
     Dishes.remove({})
     .then((resp)=>{
         res.statusCode = 200;
