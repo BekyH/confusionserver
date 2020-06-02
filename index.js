@@ -18,6 +18,7 @@ const userRouter = require('./routes/userRouter');
 const dishRouter = require('./routes/dishRouter');
 const promoRouter = require('./routes/promoRouter');
 const leaderRouter = require('./routes/leaderRouter');
+const uploadRouter = require('./routes/uploadRouter');
 const hostname = 'localhost';
 const port = 3000;
 
@@ -44,6 +45,7 @@ app.use('/users',userRouter);
 app.use('/dishes',dishRouter);
 app.use('/promotions',promoRouter);
 app.use('/leaders',leaderRouter);
+app.use('/imageupload',uploadRouter);
 
 app.use('/',(req,res,next)=>{
     console.log(req.headers);
