@@ -6,7 +6,10 @@ const cors = require('./cors');
 const leaderRouter = express.Router();
 leaderRouter.use(bodyParser.json());
 leaderRouter.route('/')
+.options(cors.corsWithOptions,(req,res)=>{
+    res.sendStatus(200);
 
+})
 
 .get(cors.cors,(req,res,next)=>{
    leaders.find({})
@@ -40,6 +43,10 @@ leaderRouter.route('/')
    .catch((err)=>next(err))
 });
 leaderRouter.route('/:leaderId')
+.options(cors.corsWithOptions,(req,res)=>{
+    res.sendStatus(200);
+
+})
 .get(cors.cors,(req,res,next)=>{
     leaders.findById(req.params.leaderId)
     .then((leader)=>{
